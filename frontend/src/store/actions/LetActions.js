@@ -116,6 +116,7 @@ export const getLet = (id) => {
                 red = l.rows.filter(r => {
                     return r.red === i
                 })
+                red.sort((a,b) => {return a.kolona-b.kolona})
                 ret = [...ret , red];
             }
             console.log("redovi prepravka",ret);

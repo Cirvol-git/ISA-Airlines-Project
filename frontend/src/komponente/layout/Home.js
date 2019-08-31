@@ -32,7 +32,7 @@ class Home extends Component {
                                             <br/>
                                             <div className="divider white"></div>
                                             <br/>
-                                            <button className="btn waves-effect waves-light gray lighten-1 centar-align" onClick={this.handleClick}>Izmeni podatke</button>      
+                                            <button className="btn waves-effect waves-light lighten-1 centar-align" onClick={this.handleClick}>Izmeni podatke</button>      
                                         </div>
                                     </div>
                                 </div>

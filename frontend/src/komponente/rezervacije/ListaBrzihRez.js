@@ -2,15 +2,24 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {createFastRes} from '../../store/actions/RezervacijaActions'
 import { getLets } from '../../store/actions/LetActions';
+import {Button, Modal} from 'react-materialize';
 
 class ListaBrzihRez extends Component{
+
+    state = {}
 
     componentDidMount() {
         this.props.getLets(this.props.match.params.id);
     }
-    resrve = (r) => {
-        this.props.createFastRes(this.props.korisnik.id,r,"");
-        this.props.history.push('/avios');
+
+    setChosen = (x) => {
+        console.log(x);
+        this.setState(x);
+    }
+
+    resrve = () => {
+        this.props.createFastRes(this.props.korisnik.id,this.state,"");
+        //this.props.history.push('/avios');
     }
 
     render() {
@@ -51,7 +60,7 @@ class ListaBrzihRez extends Component{
                             </td>
                             {this.props.korisnik.admin === false ? (
                                 <td>
-                                    <button onClick={()=>{this.resrve(r)}}>Reserve</button>
+                                    <Button onClick={()=>{this.setChosen(r)}} floating medium href="#modal1" className="modal-trigger green" waves="light" icon="add_circle_outline"/>
                                 </td>
                             ) : (
                                 null
@@ -63,7 +72,8 @@ class ListaBrzihRez extends Component{
         })
         
         return (
-            <table className="highlight">
+            <div>
+            <table className="highlight striped">
                 <thead>
                     <tr>
                         <th>Takes of from</th>
@@ -86,6 +96,11 @@ class ListaBrzihRez extends Component{
                     {listOfRows}
                 </tbody>
             </table>
+            <Modal id="modal1" actions = {<div><Button modal="close" onClick={this.resrve} floating className="green" waves="light" icon ="check"/>
+                                                        <Button floating modal="close" waves="light" className="red" icon="clear"/></div>} >
+                Are you sure you want to confirm the reservation?
+            </Modal>
+            </div>
         )
     }
 }

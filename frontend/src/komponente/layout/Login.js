@@ -45,15 +45,16 @@ class Login extends Component {
                 <form className="white" onSubmit={this.handleSubmit}>
                     <h5 className="grey-text text-darken-3">Enter your email and password</h5>
                     <div className="input-field">
-                        <input type="text" id='email' onChange={this.handleChange} />
+                        <input className="validate" type="email" id='email' onChange={this.handleChange} />
                         <label htmlFor="email">Email</label>
+                        <span className="helper-text" data-error="name@somethingmail.com" data-success="Correct"/>
                     </div>
                     <div className="input-field">
                         <input type="password" id='pass' onChange={this.handleChange} />
                         <label htmlFor="pass">Password</label>
                     </div>
                     <div className="input-field">
-                        <button className="btn grey">Login</button>
+                        <button className="btn waves-effect waves-light lighten-1 centar-align">Login</button>
                     </div>
                 </form>
             </div>

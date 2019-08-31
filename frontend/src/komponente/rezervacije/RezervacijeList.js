@@ -32,7 +32,7 @@ class RezervacijeList extends Component {
 
     render() {
         return (
-            <div>
+            <div className="container">
                 
             <Tabs className="tab-demo white-text grey darken-2 z-depth-1 tabs-fixed-width" >
                 <Tab title="Confirmed" active >

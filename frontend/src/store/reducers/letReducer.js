@@ -21,6 +21,17 @@ const letReducer = (state = initState, action) => {
                 ...state,
                 letsOfAvio: [...action.letp]
             }
+        
+        case 'CONFIRM_FAST_RES':
+
+            let ret = state.letsOfAvio.map(x=> {let resList = x.rows.filter(y=> y.id != action.rez.id); x.rows = resList; return x;});
+            console.log(ret)
+            
+            return {
+                ...state,
+                letsOfAvio: ret
+            }
+
         default: 
             return state;
     }

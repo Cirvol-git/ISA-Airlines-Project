@@ -11,7 +11,7 @@ class NavigacioniBar extends Component {
         return (
             <nav className = "nav-wrapper grey darken-3">
                 <div className="container">
-                    <Link to='/' className="brand-logo">ISA</Link>
+                    <Link to='/home' className="brand-logo">ISA</Link>
                     <Link to='/' className="right">Logout</Link>
                     {
                         this.props.ulogovan === null ? (

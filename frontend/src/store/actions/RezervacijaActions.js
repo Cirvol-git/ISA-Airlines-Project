@@ -120,6 +120,7 @@ export const createFastRes = (korisnik,r,pasos) => {
             data: ret
         }).then(res => {
             console.log(res.data)
+            dispatch({ type: "CONFIRM_FAST_RES" , rez: res.data});
         }).catch(e => {
             console.log(e);
         })

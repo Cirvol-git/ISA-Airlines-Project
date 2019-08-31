@@ -137,13 +137,16 @@ public class RezervacijaController {
 		
 		System.out.println("createFast()");
 		
+		RezervacijaDTO ret;
+		
 		try {
-		return rezervacijaService.createBrzaRez(rezDTO) == null ?
+			
+		return (ret = rezervacijaService.createBrzaRez(rezDTO)) == null ?
 				
 				new ResponseEntity<>(HttpStatus.NOT_FOUND)
 			:
 				
-				new ResponseEntity<>(HttpStatus.CREATED);
+				new ResponseEntity<>(ret,HttpStatus.CREATED);
 		
 		}catch(ObjectOptimisticLockingFailureException e) {
 			

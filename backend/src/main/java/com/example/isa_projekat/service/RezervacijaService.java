@@ -50,7 +50,7 @@ public class RezervacijaService {
 	
 	@Transactional(readOnly = false, isolation=Isolation.READ_COMMITTED,
 			rollbackFor = {IllegalArgumentException.class, NullPointerException.class, ObjectOptimisticLockingFailureException.class})
-	public Rezervacija createBrzaRez(RezervacijaDTO rezDTO) throws ObjectOptimisticLockingFailureException {
+	public RezervacijaDTO createBrzaRez(RezervacijaDTO rezDTO) throws ObjectOptimisticLockingFailureException {
 		
 		Optional<Rezervacija> r = rezervacijaRepository.findById(rezDTO.getId());
 		Optional<Korisnik> k = korisnikRepository.findById(rezDTO.getId_korisnik());
@@ -70,7 +70,7 @@ public class RezervacijaService {
 		rez.setPrezime(k.get().getPrezime());
 		rez.setPasos(rezDTO.getPasos());
 		
-		return rezervacijaRepository.save(rez);
+		return new RezervacijaDTO(rezervacijaRepository.save(rez));
 	}
 	
 	public void remove(Long id) {
