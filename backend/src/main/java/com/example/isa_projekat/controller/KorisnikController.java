@@ -1,0 +1,123 @@
+package com.example.isa_projekat.controller;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.example.isa_projekat.DTO.KorisnikDTO;
+import com.example.isa_projekat.DTO.PrijavaDTO;
+import com.example.isa_projekat.model.Korisnik;
+import com.example.isa_projekat.service.KorisnikService;
+
+@RestController
+@CrossOrigin(origins = "http://localhost:3000")
+@RequestMapping(value = "api/korisnik")
+public class KorisnikController {
+	
+	@Autowired
+	private KorisnikService korisnikService;
+	
+	@RequestMapping(
+			value = "/all",
+			method = RequestMethod.GET,
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<KorisnikDTO>> findAll() {
+		List<Korisnik> korisnici = korisnikService.findAll();
+		List<KorisnikDTO> ret = new ArrayList<KorisnikDTO>();
+		for (Korisnik k : korisnici) {
+			ret.add(new KorisnikDTO(k));
+		}
+		return new ResponseEntity<>(ret,HttpStatus.OK);
+	}
+	
+	@RequestMapping(
+			value = "/pretraga",
+			method = RequestMethod.POST,
+			consumes = MediaType.APPLICATION_JSON_VALUE,
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<KorisnikDTO>> pretraga(@RequestBody KorisnikDTO pretraga) {
+		List<Korisnik> korisnici = korisnikService.pretraga(pretraga.getIme(), pretraga.getPrezime());
+		List<KorisnikDTO> ret = new ArrayList<KorisnikDTO>();
+		for (Korisnik k : korisnici) {
+			ret.add(new KorisnikDTO(k));
+		}
+		return new ResponseEntity<>(ret,HttpStatus.OK);
+	}
+	
+	@RequestMapping(
+			value = "/{id}",
+			method = RequestMethod.GET,
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<KorisnikDTO> findOne(@PathVariable Long id) {
+		Optional<Korisnik> k = korisnikService.findOne(id);
+	
+		if(!k.isPresent()) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		return new ResponseEntity<>(new KorisnikDTO(k.get()),HttpStatus.OK);
+	}
+	
+	@RequestMapping(
+			value = "/login",
+			method = RequestMethod.POST,
+			consumes = MediaType.APPLICATION_JSON_VALUE,
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<PrijavaDTO> login(@RequestBody PrijavaDTO log) {
+		Optional<Korisnik> k = korisnikService.login(log.getEmail().trim());
+	
+		if(!k.isPresent()) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+		Korisnik ret = k.get();
+		if(!ret.getPass().equals(log.getPass())) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		PrijavaDTO r = new PrijavaDTO(ret);
+		if(ret.isAdmin() && ret.getAdminOd() != null) {
+			r.setAdminOd(ret.getAdminOd().getId());
+		}
+		return new ResponseEntity<>(r,HttpStatus.OK);
+	}
+	
+	@RequestMapping(
+			value = "",
+			method = RequestMethod.PUT,
+			consumes = MediaType.APPLICATION_JSON_VALUE,
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<KorisnikDTO> update(@RequestBody KorisnikDTO novi) {
+		System.out.println("/update("+ novi.getId() + ")");
+		Optional<Korisnik> k = korisnikService.findOne(novi.getId());
+	
+		if(!k.isPresent()) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+		Korisnik ret = k.get();
+		
+		if(!ret.getEmail().equals(novi.getEmail())) {
+			Optional<Korisnik> kor = korisnikService.login(novi.getEmail());
+			if(kor.isPresent()) {
+				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			}
+		}
+		
+		ret.setEmail(novi.getEmail());
+		ret.setPass(novi.getPass());
+		ret.setIme(novi.getIme());
+		ret.setPrezime(novi.getPrezime());
+		ret.setGrad(novi.getGrad());
+		ret.setTelefon(novi.getTelefon());
+		ret = korisnikService.save(ret);
+		return new ResponseEntity<>(new KorisnikDTO(ret),HttpStatus.OK);
+	}
+}
