@@ -1,6 +1,5 @@
 package com.example.isa_projekat.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,12 +32,10 @@ public class KorisnikController {
 			method = RequestMethod.GET,
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<KorisnikDTO>> findAll() {
-		List<Korisnik> korisnici = korisnikService.findAll();
-		List<KorisnikDTO> ret = new ArrayList<KorisnikDTO>();
-		for (Korisnik k : korisnici) {
-			ret.add(new KorisnikDTO(k));
-		}
-		return new ResponseEntity<>(ret,HttpStatus.OK);
+		
+		System.out.println("Korisnik finaAll()");
+		
+		return new ResponseEntity<>(korisnikService.findAll(), HttpStatus.OK);
 	}
 	
 	@RequestMapping(
@@ -47,12 +44,11 @@ public class KorisnikController {
 			consumes = MediaType.APPLICATION_JSON_VALUE,
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<KorisnikDTO>> pretraga(@RequestBody KorisnikDTO pretraga) {
-		List<Korisnik> korisnici = korisnikService.pretraga(pretraga.getIme(), pretraga.getPrezime());
-		List<KorisnikDTO> ret = new ArrayList<KorisnikDTO>();
-		for (Korisnik k : korisnici) {
-			ret.add(new KorisnikDTO(k));
-		}
-		return new ResponseEntity<>(ret,HttpStatus.OK);
+		
+		System.out.println("pretraga("+pretraga.getIme()+","+pretraga.getPrezime()+")");
+		
+		return new ResponseEntity<>(korisnikService.pretraga(pretraga), HttpStatus.OK);
+		
 	}
 	
 	@RequestMapping(
@@ -60,12 +56,17 @@ public class KorisnikController {
 			method = RequestMethod.GET,
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<KorisnikDTO> findOne(@PathVariable Long id) {
-		Optional<Korisnik> k = korisnikService.findOne(id);
+		
+		System.out.println("findOne("+id+")");
+		
+		KorisnikDTO ret; 
+		
+		return (ret = korisnikService.findOne(id)) == null ?
+				
+				new ResponseEntity<>(HttpStatus.NOT_FOUND)
+			:
+				new ResponseEntity<>(ret,HttpStatus.OK);
 	
-		if(!k.isPresent()) {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		}
-		return new ResponseEntity<>(new KorisnikDTO(k.get()),HttpStatus.OK);
 	}
 	
 	@RequestMapping(
@@ -74,6 +75,7 @@ public class KorisnikController {
 			consumes = MediaType.APPLICATION_JSON_VALUE,
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<PrijavaDTO> login(@RequestBody PrijavaDTO log) {
+		
 		Optional<Korisnik> k = korisnikService.login(log.getEmail().trim());
 	
 		if(!k.isPresent()) {
@@ -96,28 +98,16 @@ public class KorisnikController {
 			consumes = MediaType.APPLICATION_JSON_VALUE,
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<KorisnikDTO> update(@RequestBody KorisnikDTO novi) {
+		
 		System.out.println("/update("+ novi.getId() + ")");
-		Optional<Korisnik> k = korisnikService.findOne(novi.getId());
-	
-		if(!k.isPresent()) {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
-		Korisnik ret = k.get();
 		
-		if(!ret.getEmail().equals(novi.getEmail())) {
-			Optional<Korisnik> kor = korisnikService.login(novi.getEmail());
-			if(kor.isPresent()) {
-				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-			}
-		}
+		KorisnikDTO k;
 		
-		ret.setEmail(novi.getEmail());
-		ret.setPass(novi.getPass());
-		ret.setIme(novi.getIme());
-		ret.setPrezime(novi.getPrezime());
-		ret.setGrad(novi.getGrad());
-		ret.setTelefon(novi.getTelefon());
-		ret = korisnikService.save(ret);
-		return new ResponseEntity<>(new KorisnikDTO(ret),HttpStatus.OK);
+		return (k = korisnikService.update(novi)) == null ?
+				
+				new ResponseEntity<>(HttpStatus.NOT_FOUND)
+			:
+				new ResponseEntity<>(k, HttpStatus.OK);
+		
 	}
 }

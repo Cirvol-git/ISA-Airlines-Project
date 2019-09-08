@@ -137,11 +137,11 @@ public class LetController {
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<LetDTO> create(@RequestBody LetDTO novi) {
 		
-		Optional<Aerodrom> od = aeroService.findOne(novi.getOd());
-		Optional<Aerodrom> doo = aeroService.findOne(novi.getDoo());
+		Optional<Aerodrom> od = aeroService.findSingle(novi.getOd());
+		Optional<Aerodrom> doo = aeroService.findSingle(novi.getDoo());
 		Optional<Aviokompanija> a = avioService.findOne(novi.getIdAvio());
 		
-		if(!od.isPresent() || !doo.isPresent() || !a.isPresent()) {
+		if(od == null || doo == null || !a.isPresent()) {
 			
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
@@ -149,6 +149,8 @@ public class LetController {
 		Let ret = new Let(); 
 
 
+		//NEEEDTOFIXXITT!!
+		
 		ret.setOdDest(od.get());
 		ret.setDoDest(doo.get());
 		///DODATI PRESEDANJA!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

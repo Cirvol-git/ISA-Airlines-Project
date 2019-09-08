@@ -46,7 +46,7 @@ public class OcenaAController {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 		
-		Korisnik korisnik = korisnikService.findOne(ocenaDTO.getIdKorisnika()).get();
+		Korisnik korisnik = korisnikService.findSingle(ocenaDTO.getIdKorisnika()).get();
 		Aviokompanija avio = avioService.findOne(ocenaDTO.getIdAorL()).get();
 		
 		if (korisnik == null || avio == null) {

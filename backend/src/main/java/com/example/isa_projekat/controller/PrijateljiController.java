@@ -38,7 +38,7 @@ public class PrijateljiController {
 			method = RequestMethod.GET,
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<PrijateljiDTO>> findAllF(@PathVariable Long id) {
-		Optional<Korisnik> k = korisnikService.findOne(id);
+		Optional<Korisnik> k = korisnikService.findSingle(id);
 		
 		if(!k.isPresent()) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -62,7 +62,7 @@ public class PrijateljiController {
 			method = RequestMethod.GET,
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<PrijateljiDTO>> findAllPF(@PathVariable Long id) {
-		Optional<Korisnik> k = korisnikService.findOne(id);
+		Optional<Korisnik> k = korisnikService.findSingle(id);
 		
 		if(!k.isPresent()) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -83,7 +83,7 @@ public class PrijateljiController {
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<PrijateljiDTO>> findAllPZ(@PathVariable Long id) {
 		System.out.println("Svi zahtevi poslati od ("+ id + ")");
-		Optional<Korisnik> k = korisnikService.findOne(id);
+		Optional<Korisnik> k = korisnikService.findSingle(id);
 		
 		if(!k.isPresent()) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -104,8 +104,8 @@ public class PrijateljiController {
 			consumes = MediaType.APPLICATION_JSON_VALUE,
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<KorisnikDTO> create(@RequestBody PrijateljiDTO novi) {
-		Optional<Korisnik> k1 = korisnikService.findOne(novi.getJe());
-		Optional<Korisnik> k2 = korisnikService.findOne(novi.getOd());
+		Optional<Korisnik> k1 = korisnikService.findSingle(novi.getJe());
+		Optional<Korisnik> k2 = korisnikService.findSingle(novi.getOd());
 		if(!k1.isPresent() || !k2.isPresent()) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}

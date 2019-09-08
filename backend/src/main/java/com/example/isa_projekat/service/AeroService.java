@@ -3,6 +3,7 @@ package com.example.isa_projekat.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,28 +22,55 @@ public class AeroService {
 	private AeroRepository aeroRepository;
 	
 	@Autowired
-	private AvioRepository avioReposiroty;
+	private AvioRepository avioRepository;
 	
 	public AeroService() {}
 	
-	public Optional<Aerodrom> findOne(Long id) {
+	public AerodromDTO findOne(Long id) {
+		
+		Optional<Aerodrom> ret = aeroRepository.findById(id);
+		
+		return ret.isPresent() ? new AerodromDTO(ret.get()) : null;
+		
+	}
+	
+	public Optional<Aerodrom> findSingle(Long id) {
+		
 		return aeroRepository.findById(id);
 	}
 	
-	public List<Aerodrom> findAll() {
-		return aeroRepository.findAll();
+	public List<AerodromDTO> findAll() {
+		
+		return aeroRepository.findAll().stream().map(x -> new AerodromDTO(x)).collect(Collectors.toList());
 	}
 	/*
 	public List<Aerodrom> findByAvio(Aviokompanija a) {
 		return aeroRepository.findByPripada(a);
 	}
 	*/
+	public AerodromDTO update(AerodromDTO update) {
+		
+		Optional<Aerodrom> a = aeroRepository.findById(update.getId());
+		
+		if(!a.isPresent()) {
+			
+			return null;
+		}
+		
+		Aerodrom ret = a.get();
+		ret.setIme(update.getIme());
+		ret.setAdresa(update.getAdresa());
+		ret.setGrad(update.getGrad());
+		
+		return new AerodromDTO(aeroRepository.save(ret));
+	}
+	
 	public Aerodrom save(Aerodrom avio) {
 		return aeroRepository.save(avio);
 	}
 
 	public List<AerodromDTO> allExceptFor(Long id) {
-		Aviokompanija avio = avioReposiroty.findById(id).orElse(null);
+		Aviokompanija avio = avioRepository.findById(id).orElse(null);
 		if(avio == null) {
 			return null;
 		}
@@ -59,7 +87,7 @@ public class AeroService {
 	}
 
 	public Aerodrom addDependecy(AddAeroDepDTO dep) {
-		Aviokompanija a =avioReposiroty.findById(dep.getIdAvio()).orElse(null);
+		Aviokompanija a =avioRepository.findById(dep.getIdAvio()).orElse(null);
 		Aerodrom b =aeroRepository.findById(dep.getIdAero()).orElse(null);
 		if(a == null || b == null) {
 			return null;
@@ -67,5 +95,27 @@ public class AeroService {
 		a.getDestinacije().add(b);
 		b.getKompanije().add(a);
 		return aeroRepository.save(b);
+	}
+
+	public Aerodrom create(AerodromDTO novi) {
+
+		Optional<Aviokompanija>	avio = avioRepository.findById(novi.getIdAvio());
+		
+		if(!avio.isPresent()) {
+			
+			return null;
+		}
+		
+		Aerodrom aero = new Aerodrom();
+		
+		aero.setIme(novi.getIme());
+		aero.setAdresa(novi.getAdresa());
+		aero.setGrad(novi.getGrad());
+		
+		aero.getKompanije().add(avio.get());
+		avio.get().getDestinacije().add(aero);
+		
+		return aeroRepository.save(aero);
+		
 	}
 }
