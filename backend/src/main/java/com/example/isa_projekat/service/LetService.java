@@ -61,8 +61,10 @@ public class LetService {
 		
 	}
 
-	public List<Let> findAll() {
-		return letRepository.findAll();
+	public List<LetDTO> findAll() {
+		
+		return letRepository.findAll()
+				.stream().map(x -> new LetDTO(x)).collect(Collectors.toList());
 	}
 	
 	public Let save(Let let) {

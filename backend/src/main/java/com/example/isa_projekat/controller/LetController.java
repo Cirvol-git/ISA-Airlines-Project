@@ -1,6 +1,5 @@
 package com.example.isa_projekat.controller;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -46,18 +45,15 @@ public class LetController {
 			method = RequestMethod.GET,
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<LetDTO>> findAll() {
-		List<Let> letovi = letService.findAll();
-		List<LetDTO> ret = new ArrayList<LetDTO>();
-		LetDTO za;
-		for (Let l : letovi) {
-			za = new LetDTO(l);
-			//for (Aerodrom a : l.getDestinacije()) {
-				//za.getDestinacijeTrue().add(new AerodromDTO(a));
-			//}
-			ret.add(za);
-		}
+		
+		System.out.println("Let findAll()");
+		
+		List<LetDTO> ret = letService.findAll();
+		
 		return new ResponseEntity<>(ret,HttpStatus.OK);
+		
 	}
+	
 	@RequestMapping(
 			value = "/{id}",
 			method = RequestMethod.GET,
@@ -92,8 +88,8 @@ public class LetController {
 			:
 				
 				new ResponseEntity<>(ret,HttpStatus.OK);
-	}
 	
+	}
 	
 	@RequestMapping(
 			value = "/pretraga",
@@ -121,6 +117,7 @@ public class LetController {
 			consumes = MediaType.APPLICATION_JSON_VALUE,
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Let> update(@RequestBody Let novi) {
+	
 		LetDTO k = letService.findOne(novi.getId());
 	
 		if(k == null) {
@@ -128,6 +125,7 @@ public class LetController {
 		}
 		Let ret = letService.save(novi);
 		return new ResponseEntity<>(ret,HttpStatus.OK);
+	
 	}
 	
 	@RequestMapping(
