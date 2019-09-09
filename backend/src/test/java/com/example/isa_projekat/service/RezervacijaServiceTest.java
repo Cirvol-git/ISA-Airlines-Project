@@ -1,6 +1,7 @@
 package com.example.isa_projekat.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
@@ -53,41 +54,6 @@ public class RezervacijaServiceTest {
 	private RezervacijaService rezervacijaService;
 	
 	@Test
-	@Transactional
-	@Rollback(true)
-	public void testCreateFastReservation() {
-		
-		Korisnik k = new Korisnik();
-		k.setId(1l);
-		k.setIme("ime");
-		k.setPrezime("prezime");
-		
-		Rezervacija r = new Rezervacija();
-		r.setId(1l);
-		
-		RezervacijaDTO dto = new RezervacijaDTO();
-		dto.setId(1l);
-		dto.setId_korisnik(2l);
-		dto.setVersion(55l);
-		dto.setRezervisano(new Date());
-		dto.setPotvrdjeno(true);
-		dto.setPasos("1111");
-		
-		when(rezervacijaRepositoryMock.findById(1l)).thenReturn(Optional.of(r));
-		when(korisnikRepositoryMock.findById(2l)).thenReturn(Optional.of(new Korisnik()));
-		when(rezervacijaRepositoryMock.save(r)).thenReturn(new Rezervacija());
-		
-		rezervacijaService.createBrzaRez(dto);
-		
-		verify(rezervacijaRepositoryMock, times(1)).findById(1l);
-		verify(korisnikRepositoryMock, times(1)).findById(2l);
-		verify(rezervacijaRepositoryMock, times(1)).save(r);
-		
-		verifyNoMoreInteractions(korisnikRepositoryMock);
-		verifyNoMoreInteractions(rezervacijaRepositoryMock);
-	}
-	
-	@Test
 	public void testFindByKorisnik() {
 		
 		
@@ -101,7 +67,9 @@ public class RezervacijaServiceTest {
 		when(korisnikRepositoryMock.findById(1l)).thenReturn(Optional.of(k));
 		when(rezervacijaRepositoryMock.findByPripadaKorisniku(k)).thenReturn(rezs);
 		
-		rezervacijaService.findByKorisnik(1l);
+		List<RezervacijaDTO> ret = rezervacijaService.findByKorisnik(1l);
+		
+		assertThat(ret).hasSize(1);
 		
 		verify(korisnikRepositoryMock, times(1)).findById(1l);
 		verify(rezervacijaRepositoryMock, times(1)).findByPripadaKorisniku(k);
@@ -131,7 +99,9 @@ public class RezervacijaServiceTest {
 		when(let.getSleceTime()).thenReturn(new Date());
 		when(let.getAvio()).thenReturn(new Aviokompanija());
 		
-		rezervacijaService.findByKorisnikAndPotvrdjeno(1l, true);
+		List<RezervacijaDTO> ret = rezervacijaService.findByKorisnikAndPotvrdjeno(1l, true);
+		
+		assertThat(ret).hasSize(1);
 		
 		verify(korisnikRepositoryMock, times(1)).findById(1l);
 		verify(rezervacijaRepositoryMock, times(1)).findByPripadaKorisnikuAndPotvrdjeno(k, true);
@@ -159,18 +129,53 @@ public class RezervacijaServiceTest {
 	@Test
 	public void testDecline() {
 		
-		
-		
 		Rezervacija r = new Rezervacija();
 		r.setId(1l);
 		
 		when(rezervacijaRepositoryMock.findById(1l)).thenReturn(Optional.of(r));
 		when(rezervacijaRepositoryMock.save(r)).thenReturn(rez);
 		
-		rezervacijaService.decline(new RezervacijaDTO(r));
+		assertNotNull(rezervacijaService.decline(new RezervacijaDTO(r)));
 		
 		verify(rezervacijaRepositoryMock, times(1)).findById(1l);
 		verify(rezervacijaRepositoryMock, times(1)).save(r);
 		verifyNoMoreInteractions(rezervacijaRepositoryMock);
+
 	}
+	
+	@Test
+	@Transactional
+	@Rollback(true)
+	public void testCreateFastReservation() {
+		
+		Korisnik k = new Korisnik();
+		k.setId(1l);
+		k.setIme("ime");
+		k.setPrezime("prezime");
+		
+		Rezervacija r = new Rezervacija();
+		r.setId(1l);
+		
+		RezervacijaDTO dto = new RezervacijaDTO();
+		dto.setId(1l);
+		dto.setId_korisnik(2l);
+		dto.setVersion(55l);
+		dto.setRezervisano(new Date());
+		dto.setPotvrdjeno(true);
+		dto.setPasos("1111");
+		
+		when(rezervacijaRepositoryMock.findById(1l)).thenReturn(Optional.of(r));
+		when(korisnikRepositoryMock.findById(2l)).thenReturn(Optional.of(new Korisnik()));
+		when(rezervacijaRepositoryMock.save(r)).thenReturn(new Rezervacija());
+		
+		assertNotNull(rezervacijaService.createBrzaRez(dto));
+		
+		verify(rezervacijaRepositoryMock, times(1)).findById(1l);
+		verify(korisnikRepositoryMock, times(1)).findById(2l);
+		verify(rezervacijaRepositoryMock, times(1)).save(r);
+		
+		verifyNoMoreInteractions(korisnikRepositoryMock);
+		verifyNoMoreInteractions(rezervacijaRepositoryMock);
+	}
+	
 }

@@ -1,6 +1,7 @@
 package com.example.isa_projekat.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
@@ -84,7 +85,7 @@ public class LetServiceTest {
 		when(let.getSleceTime()).thenReturn(new Date());
 		when(let.getAvio()).thenReturn(new Aviokompanija());
 		
-		letService.findOne(1l);
+		assertNotNull(letService.findOne(1l));
 		
 		verify(letRepositoryMock, times(1)).findById(1l);
 		
@@ -108,7 +109,9 @@ public class LetServiceTest {
 		when(let.getSleceTime()).thenReturn(new Date());
 		when(let.getAvio()).thenReturn(new Aviokompanija());
 		
-		letService.findByAvio(1l);
+		List<LetDTO> ret = letService.findByAvio(1l);
+		
+		assertThat(ret).hasSize(1);
 		
 		verify(avioRepositoryMock, times(1)).findById(1l);
 		verifyNoMoreInteractions(avioRepositoryMock);
@@ -140,7 +143,9 @@ public class LetServiceTest {
 		when(let.getSleceTime()).thenReturn(new Date());
 		when(let.getAvio()).thenReturn(new Aviokompanija());
 		
-		letService.pretraga(dto);
+		List<LetDTO> ret = letService.pretraga(dto);
+		
+		assertThat(ret).hasSize(1);
 		
 		verify(aeroRepositoryMock, times(1)).findById(1l);
 		verify(aeroRepositoryMock, times(1)).findById(2l);

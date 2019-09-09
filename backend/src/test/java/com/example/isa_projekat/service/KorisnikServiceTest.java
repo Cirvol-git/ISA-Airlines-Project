@@ -1,6 +1,8 @@
 package com.example.isa_projekat.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
@@ -49,6 +51,21 @@ public class KorisnikServiceTest {
 	}
 	
 	@Test
+	public void testFindOne() {
+		
+		Korisnik a = new Korisnik();
+		a.setId(5l);
+		
+		when(korisnikRepositoryMock.findById(2l)).thenReturn(Optional.of(a));
+		
+		KorisnikDTO found = korisnikService.findOne(2l);
+	
+		assertEquals(found.getId(),a.getId());
+		verify(korisnikRepositoryMock, times(1)).findById(2l);
+        verifyNoMoreInteractions(korisnikRepositoryMock);
+	}
+	
+	@Test
 	public void testPretraga() {
 		
 		KorisnikDTO dto = new KorisnikDTO();
@@ -86,7 +103,7 @@ public class KorisnikServiceTest {
 		when(korisnikRepositoryMock.findByEmail("email@hotmail.com")).thenReturn(Optional.empty());
 		when(korisnikRepositoryMock.save(k)).thenReturn(new Korisnik());
 		
-		korisnikService.update(update);
+		assertNotNull(korisnikService.update(update));
 		
 		verify(korisnikRepositoryMock, times(1)).findById(1l);
 		verify(korisnikRepositoryMock, times(1)).findByEmail("email@hotmail.com");

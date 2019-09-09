@@ -2,6 +2,7 @@ package com.example.isa_projekat.controller;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -21,13 +22,13 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
 import com.example.isa_projekat.TestUtil;
-import com.example.isa_projekat.DTO.AerodromDTO;
+import com.example.isa_projekat.DTO.KorisnikDTO;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class AeroControllerTest {
-	
-	private static final String URL_PREFIX = "/api/aero";
+public class KorisnikControllerTest {
+
+private static final String URL_PREFIX = "/api/korisnik";
 	
 	private MediaType contentType = new MediaType(MediaType.APPLICATION_JSON.getType(),
 			MediaType.APPLICATION_JSON.getSubtype(), Charset.forName("utf8"));
@@ -50,13 +51,9 @@ public class AeroControllerTest {
 	public void testFindAll() throws Exception {
 		
 		mockMvc.perform(get(URL_PREFIX + "/all")).andExpect(status().isOk())
-		.andExpect(content().contentType(contentType));//.andExpect(jsonPath("$", hasSize(1)))
-		//.andExpect(jsonPath("$.[*].id").value(hasItem(1l))
-		//.andExpect(jsonPath("$.[*].firstName").value(hasItem("ime")))
-		//.andExpect(jsonPath("$.[*].lastName").value(hasItem("prezime")))
-		//.andExpect(jsonPath("$.[*].index").value(hasItem("asfa")));
+		.andExpect(content().contentType(contentType));
 	}
-	
+
 	@Test
 	public void testFindOne() throws Exception {
 		
@@ -66,21 +63,33 @@ public class AeroControllerTest {
 	}
 	
 	@Test
-	@Transactional
-	@Rollback(true)
-	public void testCreate() throws Exception {
+	public void testPretraga() throws Exception {
 		
-		AerodromDTO dto = new AerodromDTO();
-		dto.setIdAvio(1l);
-		dto.setGrad("Novi Sad");
-		dto.setAdresa("Svetozara Miletica 50");
-		dto.setIme("NS Airlines");
+		KorisnikDTO dto = new KorisnikDTO();
+		dto.setIme("ime");
+		dto.setPrezime("prezime");
 		
 		String json = TestUtil.json(dto);
 		
-		mockMvc.perform(post(URL_PREFIX + "/create").contentType(contentType).content(json)).andExpect(status().isCreated());
-		//.andExpect(content().contentType(contentType));
-		//this.mockMvc.perform(put(URL_PREFIX).contentType(contentType).content(json)).andExpect(status().isOk());
+		mockMvc.perform(post(URL_PREFIX + "/pretraga").contentType(contentType).content(json)).andExpect(status().isOk());
+	}
+	
+	@Test
+	@Transactional
+	@Rollback(true)
+	public void testUpdate() throws Exception {
 		
+		KorisnikDTO dto = new KorisnikDTO();
+		dto.setId(1l);
+		dto.setEmail("email@hotmail.com");
+		dto.setPass("123");
+		dto.setIme("ime");
+		dto.setPrezime("prezime");
+		dto.setGrad("grad");
+		dto.setTelefon("066666");
+		
+		String json = TestUtil.json(dto);
+		
+		mockMvc.perform(put(URL_PREFIX + "").contentType(contentType).content(json)).andExpect(status().isOk());
 	}
 }
