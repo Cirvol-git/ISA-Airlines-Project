@@ -45,7 +45,7 @@ public class Korisnik {
 	@OneToMany(mappedBy = "odKorisnika", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<OcenaAvio> oceneAvio = new HashSet<OcenaAvio>();
 	
-	@OneToMany(mappedBy = "odKLet", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "odKorisnika", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<OcenaLeta> oceneLetaova = new HashSet<OcenaLeta>();
 	
 	@OneToMany(mappedBy = "je", fetch = FetchType.LAZY, cascade = CascadeType.ALL)

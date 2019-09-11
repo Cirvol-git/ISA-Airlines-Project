@@ -118,6 +118,9 @@ public class PrijateljiController {
 			value = "/update/{id}",
 			method = RequestMethod.PUT)
 	public ResponseEntity<PrijateljiDTO> update(@PathVariable Long id) {
+		
+		System.out.println("Prijatelj update("+id+")");
+		
 		Optional<Prijatelji> p = prijateljiService.findOne(id);
 		if(!p.isPresent()) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -132,6 +135,9 @@ public class PrijateljiController {
 			value = "/delete/{id}",
 			method = RequestMethod.DELETE)
 	public ResponseEntity<PrijateljiDTO> delete(@PathVariable Long id) {
+		
+		System.out.println("Prijatelj delete("+id+")");
+		
 		Optional<Prijatelji> p = prijateljiService.findOne(id);
 		if(!p.isPresent()) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);

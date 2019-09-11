@@ -9,6 +9,10 @@ import com.example.isa_projekat.model.Korisnik;
 import com.example.isa_projekat.model.OcenaAvio;
 
 public interface OcenaARepository extends JpaRepository<OcenaAvio, Long>{
-	List<OcenaAvio> findByOcenaAvioAndOdKorisnika(Aviokompanija ocenaAvio, Korisnik odKorisnika);
-	List<OcenaAvio> findByOcenaAvio(Aviokompanija ocenaAvio);
+	
+	OcenaAvio findByAvioAndOdKorisnika(Aviokompanija avio, Korisnik korisnik);
+	
+	List<OcenaAvio> findByAvio(Aviokompanija avio);
+	
+	List<OcenaAvio> findByOdKorisnika(Korisnik korisnik);
 }

@@ -27,15 +27,15 @@ class AvioIzmeni extends Component {
                     <h5 className="grey-text text-darken-3">Update company info</h5>
                     <div className="input-field">
                         <input type="text" id='ime' value={this.state.ime} onChange={this.handleChange} />
-                        <label htmlFor="ime">Name</label>
+                        <label className="active" htmlFor="ime">Name</label>
                     </div>
                     <div className="input-field">
                         <input type="text" id='adresa' value={this.state.adresa} onChange={this.handleChange} />
-                        <label htmlFor="adresa">Address</label>
+                        <label className="active" htmlFor="adresa">Address</label>
                     </div>
                     <div className="input-field">
                         <input type="text" id='opis' value={this.state.opis} onChange={this.handleChange} />
-                        <label htmlFor="opis">Opis</label>
+                        <label className="active" htmlFor="opis">Opis</label>
                     </div>
                     <div className="input-field">
                         <button className="btn grey">Update</button>

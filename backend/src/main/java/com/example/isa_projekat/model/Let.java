@@ -87,7 +87,7 @@ public class Let {
 	@OneToMany(mappedBy = "pripadaLetu", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<Rezervacija> rezervacije = new HashSet<Rezervacija>();
 	
-	@OneToMany(mappedBy = "ocenaLeta", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "let", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<OcenaLeta> ocene = new HashSet<OcenaLeta>();
 	
 	@Column(name = "prtljag")

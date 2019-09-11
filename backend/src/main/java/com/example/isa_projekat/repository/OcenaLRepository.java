@@ -9,6 +9,10 @@ import com.example.isa_projekat.model.Let;
 import com.example.isa_projekat.model.OcenaLeta;
 
 public interface OcenaLRepository extends JpaRepository<OcenaLeta, Long> {
-	List<OcenaLeta> findByOcenaLetaAndOdKLet(Let ocenaLeta, Korisnik odKLet);
-	List<OcenaLeta> findByOcenaLeta(Let ocenaLeta);
+	
+	List<OcenaLeta> findByLet(Let let);
+	
+	List<OcenaLeta> findByOdKorisnika(Korisnik korisnik);
+	
+	OcenaLeta findByLetAndOdKorisnika(Let let, Korisnik korisnik);
 }

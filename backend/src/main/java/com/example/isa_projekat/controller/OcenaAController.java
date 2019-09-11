@@ -1,7 +1,6 @@
 package com.example.isa_projekat.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,11 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.isa_projekat.DTO.OcenaDTO;
-import com.example.isa_projekat.model.Aviokompanija;
-import com.example.isa_projekat.model.Korisnik;
-import com.example.isa_projekat.model.OcenaAvio;
-import com.example.isa_projekat.service.AvioService;
-import com.example.isa_projekat.service.KorisnikService;
+import com.example.isa_projekat.DTO.OcenaProsekDTO;
 import com.example.isa_projekat.service.OcenaAService;
 
 @RestController
@@ -30,62 +25,78 @@ public class OcenaAController {
 	@Autowired
 	private OcenaAService ocenaAService;
 	
-	@Autowired
-	private AvioService avioService;
-	
-	@Autowired
-	private KorisnikService korisnikService;
+	@RequestMapping(value = "/allfrom/{id}",
+			method = RequestMethod.GET, 
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<OcenaDTO>> getRatingFromKorisnik(@PathVariable Long id) {
+		
+		System.out.println("getRatingsFrom("+id+")");
+		
+		List<OcenaDTO> ret;
+		
+		return (ret = ocenaAService.getFromKorisnik(id)) == null ?
+				
+				new ResponseEntity<>(HttpStatus.NOT_FOUND)
+			:
+				
+				new ResponseEntity<>(ret,HttpStatus.OK);
+	}
 	
 	@RequestMapping(value = "/oceni",
 					method = RequestMethod.POST, 
 					consumes = MediaType.APPLICATION_JSON_VALUE,
 					produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<OcenaDTO> createExam(@RequestBody OcenaDTO ocenaDTO) {
+	public ResponseEntity<OcenaDTO> createOcena(@RequestBody OcenaDTO dto) {
 		
-		if (ocenaDTO.getIdAorL() == null || ocenaDTO.getIdKorisnika() == null) {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		System.out.println("Rate avio:"+dto.getIdAorL()+" , korisnik:"+dto.getIdKorisnika()+" ("+ dto.getVrednost()+")");
+		
+		if(ocenaAService.cantVote(dto)) {
+			
+			return new ResponseEntity<>(HttpStatus.OK);
 		}
 		
-		Korisnik korisnik = korisnikService.findSingle(ocenaDTO.getIdKorisnika()).get();
-		Aviokompanija avio = avioService.findOne(ocenaDTO.getIdAorL()).get();
+		OcenaDTO ret;
 		
-		if (korisnik == null || avio == null) {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		}
+		return (ret = ocenaAService.oceni(dto)) == null ?
+				
+				new ResponseEntity<>(HttpStatus.NOT_FOUND)
+			:
+				
+				new ResponseEntity<>(ret,HttpStatus.CREATED);
 		
-		OcenaAvio ocena = new OcenaAvio();
-		ocena.setOcenaAvio(avio);
-		ocena.setOdKorisnika(korisnik);
-		ocena.setVrednost(ocenaDTO.getVrednost());
-		List<OcenaAvio> postoji = ocenaAService.exists(avio, korisnik);
-		if(!postoji.isEmpty()) {
-			ocena.setId(postoji.get(0).getId());
-			ocenaAService.save(ocena);
-			return new ResponseEntity<>(ocenaDTO, HttpStatus.OK);
-		}
-
-		ocenaAService.save(ocena);
-		return new ResponseEntity<>(ocenaDTO, HttpStatus.CREATED);
 	}
 	
-	@RequestMapping(value = "/{id}",
-					method = RequestMethod.GET)
-	public ResponseEntity<Integer> prosek(@PathVariable Long id) {
-		Optional<Aviokompanija> avio = avioService.findOne(id);
+	@RequestMapping(value = "/prosek/{id}",
+					method = RequestMethod.GET,
+					produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<OcenaDTO>> prosek(@PathVariable Long id) {
 		
-		if(!avio.isPresent()) {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		}
-		List<OcenaAvio> lista = ocenaAService.findByAvio(avio.get());
+		System.out.println("prosekOcenaForAvio("+id+")");
 		
-		if(lista.isEmpty()) {
-			return new ResponseEntity<Integer>(0, HttpStatus.OK);
-		}
-		int ret = 0;
-		for (OcenaAvio o : lista) {
-			ret += o.getVrednost();
-		}
-		ret = ret/ lista.size();
-		return new ResponseEntity<Integer>(ret, HttpStatus.OK);
+		List<OcenaDTO> ret;
+		
+		return (ret = ocenaAService.prosek(id)) == null ?
+			
+				new ResponseEntity<>(HttpStatus.NOT_FOUND)
+			:
+		
+				new ResponseEntity<>(ret, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/allprosek",
+			method = RequestMethod.GET,
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<OcenaProsekDTO>> getAllProsek() {
+	
+		System.out.println("prosekAll()");
+		
+		List<OcenaProsekDTO> ret;
+		
+		return (ret = ocenaAService.allProsek()) == null ?
+		
+			new ResponseEntity<>(HttpStatus.NOT_FOUND)
+		:
+	
+			new ResponseEntity<>(ret, HttpStatus.OK);
 	}
 }

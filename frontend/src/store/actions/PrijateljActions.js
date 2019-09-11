@@ -50,24 +50,24 @@ export const createPrijatelji = (je,od) => {
     }
 }
 
-export const deletePrijatelj = (id) => {
+export const deletePrijatelj = (x) => {
     return (dispatch, getState) => {
-        dispatch({ type: 'DELETE_PRIJATELJ', id: id})
-        axios.delete('http://localhost:8080/api/prijatelji/delete/'+id)
+        
+        axios.delete('http://localhost:8080/api/prijatelji/delete/'+x.id)
             .then(res => {
-                
+                dispatch({ type: 'DELETE_PRIJATELJ', id: x.id})
             }).catch(e => {
                 console.log(e);
             })
     }
 }
 
-export const acceptPrijatelj = (id) => {
+export const acceptPrijatelj = (x) => {
     return (dispatch, getState) => {
         
-        axios.put('http://localhost:8080/api/prijatelji/update/'+id)
+        axios.put('http://localhost:8080/api/prijatelji/update/'+x.id)
             .then(res => {
-                dispatch({ type: 'ACCEPT_PRIJATELJ', id: id})
+                dispatch({ type: 'ACCEPT_PRIJATELJ', id: x.id})
             }).catch(e => {
                 console.log(e);
             })

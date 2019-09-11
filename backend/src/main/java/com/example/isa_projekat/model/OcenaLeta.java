@@ -20,10 +20,10 @@ public class OcenaLeta {
 	private Aviokompanija pripadaAvio;
 	*/
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private Let ocenaLeta;
+	private Let let;
 	
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private Korisnik odKLet;
+	private Korisnik odKorisnika;
 	
 	@Column(name = "vrednost")
 	private int vrednost;
@@ -37,21 +37,21 @@ public class OcenaLeta {
 	public void setId(Long id) {
 		this.id = id;
 	}
-
-	public Let getOcenaLeta() {
-		return ocenaLeta;
+	
+	public Let getLet() {
+		return let;
 	}
 
-	public void setOcenaLeta(Let ocenaLeta) {
-		this.ocenaLeta = ocenaLeta;
+	public void setLet(Let let) {
+		this.let = let;
 	}
 
-	public Korisnik getOdKLet() {
-		return odKLet;
+	public Korisnik getOdKorisnika() {
+		return odKorisnika;
 	}
 
-	public void setOdKLet(Korisnik odKLet) {
-		this.odKLet = odKLet;
+	public void setOdKorisnika(Korisnik odKorisnika) {
+		this.odKorisnika = odKorisnika;
 	}
 
 	public int getVrednost() {

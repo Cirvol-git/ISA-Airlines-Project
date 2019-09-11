@@ -4,10 +4,11 @@ import {Link} from 'react-router-dom';
 const DestOpis = ({dest}) => {
     return (
         <Link to={'dest/' + dest.id} className="centar">
-        <div className="card z-depth-0">
-            <div className="card-content gray-text text-darken-3">
+        <div className="card grey darken-2 card-panel hoverable">
+            <div className="card-content white-text left-align">
                 <p className="card-title">{dest.ime}</p>
-                <p>{dest.adresa}</p>
+                <p>Adress: {dest.adresa}</p>
+                <p>City: {dest.grad}</p>
             </div>
         </div>
         </Link>

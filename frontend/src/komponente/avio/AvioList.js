@@ -9,7 +9,7 @@ const AvioList = ({avios}) => {
                 return (
                     <div>
                         <AvioOpis avio={avio} key = {avio.id}/>
-                        <Link to={'/brzeRezervacije/' + avio.id}><button>Tickets for fast reservations</button></Link>
+                        <Link to={'/brzeRezervacije/' + avio.id}><button className="btn waves-effect waves-light lighten-1 centar-align">Tickets for fast reservations</button></Link>
                     </div>
                 )
             })}

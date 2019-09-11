@@ -17,7 +17,7 @@ public class OcenaAvio {
 	private Long id;
 	
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private Aviokompanija ocenaAvio;
+	private Aviokompanija avio;
 	
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Korisnik odKorisnika;
@@ -35,12 +35,12 @@ public class OcenaAvio {
 		this.id = id;
 	}
 	
-	public Aviokompanija getOcenaAvio() {
-		return ocenaAvio;
+	public Aviokompanija getAvio() {
+		return avio;
 	}
 
-	public void setOcenaAvio(Aviokompanija ocenaAvio) {
-		this.ocenaAvio = ocenaAvio;
+	public void setAvio(Aviokompanija avio) {
+		this.avio = avio;
 	}
 
 	public Korisnik getOdKorisnika() {

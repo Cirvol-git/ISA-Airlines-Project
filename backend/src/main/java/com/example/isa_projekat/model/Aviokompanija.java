@@ -37,7 +37,7 @@ public class Aviokompanija {
 	@Column(name = "opis", length = 55)
 	private String opis;
 	
-	@OneToMany(mappedBy = "ocenaAvio", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "avio", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<OcenaAvio> ocene = new HashSet<OcenaAvio>();
 	/*
 	@OneToMany(mappedBy = "pripadaAvio", fetch = FetchType.LAZY, cascade = CascadeType.ALL)

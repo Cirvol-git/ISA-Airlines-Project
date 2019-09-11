@@ -59,7 +59,7 @@ class DodajPrijatelja extends Component {
                         <label htmlFor="prezime">Last Name</label>
                     </div>
                     <div className="input-field">
-                        <button className="btn grey">Pretraga</button>
+                        <button className="btn waves-effect waves-light lighten-1 centar-align">Search</button>
                     </div>
                 </form>
                 <KorisnikList 

@@ -23,12 +23,12 @@ class Home extends Component {
                                             <div className="divider white"></div>
                                             <br/>
                                             <p>Email: {this.props.log.email}</p>
-                                            <p>Broj telefona: {this.props.log.telefon}</p>
+                                            <p>Phone number: {this.props.log.telefon}</p>
                                             <p></p>
                                             <br/>
                                             <div className="divider white"></div>
                                             <br/>
-                                            <p>Grad: {this.props.log.grad}</p>
+                                            <p>City: {this.props.log.grad}</p>
                                             <br/>
                                             <div className="divider white"></div>
                                             <br/>
